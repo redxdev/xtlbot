@@ -8,11 +8,11 @@ local ipairs = ipairs
 local type = type
 local pcall = pcall
 
-local info = require("src.info")
 local irce = require("irce")
 local socket = require("socket")
 local sqlite3 = require("lsqlite3")
 
+local info = require("src.info")
 local config = require("config.config")
 local lang = require("config.lang")
 local plugins = require("config.plugins")

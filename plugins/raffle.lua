@@ -18,7 +18,7 @@ local current_raffle
 local plugin = {}
 
 local function loop_hook()
-    if current_raffle then
+    if current_raffle and current_raffle.mode == "timed" then
         local currentTime = socket.gettime()
         if current_raffle.end_time < currentTime then
             plugin.end_raffle()
@@ -27,29 +27,25 @@ local function loop_hook()
 end
 
 local function cmd_raffle(user, args)
-    if #args == 1 then
-        current_raffle = {
-            entries = {}
-        }
+    current_raffle = {
+        entries = {}
+    }
 
-        if args[1] == "manual" then
-            current_raffle.mode = "manual"
+    if #args == 0 then
+        current_raffle.mode = "manual"
 
-            core.send(lang.raffle_start)
-        else
-            local time = tonumber(args[1])
-            if time < 1 then
-                core.send_to_user(user.name, "Raffle time must be at least 1 second")
-                return
-            end
-
-            current_raffle.mode = "timed"
-            current_raffle.end_time = socket.gettime() + time
-
-            core.send(lang.raffle_start_timed:format(time))
-        end
+        core.send(lang.raffle_start)
     else
-        core.send_to_user(user.name, "!raffle <number/manual>")
+        local time = tonumber(args[1])
+        if time < 1 then
+            core.send_to_user(user.name, "Raffle time must be at least 1 second")
+            return
+        end
+
+        current_raffle.mode = "timed"
+        current_raffle.end_time = socket.gettime() + time
+
+        core.send(lang.raffle_start_timed:format(time))
     end
 end
 
@@ -98,7 +94,7 @@ function plugin.end_raffle()
 
     local idx = random(#entries)
     local winner = entries[idx]
-    core.send("The winner of the raffle is " .. winner .. "!")
+    core.send("The winner of the raffle is @" .. winner .. "!")
 end
 
 return plugin
