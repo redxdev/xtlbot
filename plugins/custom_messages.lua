@@ -2,6 +2,7 @@
 local require = require
 local error = error
 local concat = table.concat
+local print = print
 
 local sqlite3 = require("lsqlite3")
 
@@ -92,7 +93,7 @@ function plugin.init()
             command = name,
             func = function() send_message(name) end
         }
-        commands.register(name, v.description, msg.func, "user")
+        commands.register(name, v.description, msg.func, "util.custom_command.use")
         messages[name] = msg
     end
 
