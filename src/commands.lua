@@ -5,6 +5,7 @@ local assert = assert
 local insert = table.insert
 local remove = table.remove
 local type = type
+local pcall = pcall
 
 require "src.stringutils"
 
@@ -32,9 +33,15 @@ local function process_message(sender, origin, msg, pm)
                 return
             end
 
-            print("Command " .. name .. " called by " .. sender[1])
+            print("Command \"" .. name .. "\" called by " .. sender[1])
             remove(arguments, 1)
-            command.callback(user, arguments)
+            local status, err = pcall(command.callback, user, arguments)
+            if not status then
+                print("Error while calling command " .. name .. ": " .. err)
+                core.send_to_user(sender[1], "There was a problem running that command.")
+            else
+                core.timeout(user.name)
+            end
         else
             core.send_to_user(sender[1], lang.unknown_command)
         end
@@ -62,6 +69,15 @@ function commands.register(name, help, callback, role)
         callback = callback,
         role = role
     }
+end
+
+function commands.remove(name)
+    assert(type(name) == "string", "command name must be a string")
+    if not command_list[name] then
+        error("Command " .. name .. " not registered")
+    end
+
+    command_list[name] = nil
 end
 
 function commands.list()

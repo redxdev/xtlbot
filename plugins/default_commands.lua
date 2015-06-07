@@ -2,7 +2,7 @@ local print = print
 local pairs = pairs
 
 local commands = require("src.commands")
-local core
+local core = require("src.core")
 local users = require("src.users")
 
 local plugin = {}
@@ -33,12 +33,20 @@ local function cmd_role(user, args)
     print(user.name .. " set " .. target.name .. "'s role to " .. target.role)
 end
 
-function plugin.init(corelib)
-    core = corelib
+local function cmd_setmod(user, args)
+    if #args ~= 1 then core.send_to_user(user.name, "!setmod <user>") end
+    local target = args[1]
+    core.send(".mod " .. target)
+    core.send_to_user(user.name, "Set " .. target .. " as a twitch mod")
+    print(user.name .. " set " .. target .. " as a twitch mod")
+end
+
+function plugin.init()
     commands.register("help", "displays the list of commands", cmd_help, "user")
     commands.register("ping", "pong", cmd_ping, "user")
     commands.register("whoami", "display your role", cmd_whoami, "user")
     commands.register("role", "set a user's role", cmd_role, "superadmin")
+    commands.register("setmod", "set a user as a twitch mod", cmd_setmod, "superadmin")
 end
 
 return plugin

@@ -6,6 +6,7 @@ local assert = assert
 local insert = table.insert
 local ipairs = ipairs
 local type = type
+local pcall = pcall
 
 local info = require("src.info")
 local irce = require("irce")
@@ -25,7 +26,11 @@ local irc
 local running = false
 local db
 
+local send_queue = {first = 0, last = -1 }
+local last_send = 0
+
 local msg_hooks = {}
+local loop_hooks = {}
 
 function core.init()
     if running then
@@ -91,11 +96,15 @@ function core.init()
     for _,name in ipairs(plugins) do
         print("Loading plugin " .. name)
         local plugin = require("plugins." .. name)
-        plugin.init(core)
+        plugin.init()
     end
 
     while running do
-        irc:process(client:receive())
+        -- pcall this for safety
+        local status, err = pcall(core.loop)
+        if not status then
+            print(err)
+        end
     end
 
     print "Shutting down xtlbot"
@@ -109,11 +118,18 @@ function core.stop()
 end
 
 function core.send(message)
-    irc:send("PRIVMSG", config.channel, message)
+    local last = send_queue.last + 1
+    send_queue.last = last
+    send_queue[last] = message
 end
 
 function core.send_to_user(user, message)
     core.send(lang.to_user:format(user, message))
+end
+
+function core.timeout(user, n)
+    n = n or 1
+    core.send(".timeout " .. user .. " " .. n)
 end
 
 function core.db()
@@ -131,6 +147,27 @@ end
 function core.hook_message(f)
     assert(type(f) == "function", "message hook must be a function")
     insert(msg_hooks, f)
+end
+
+function core.hook_loop(f)
+    assert(type(f) == "function", "loop hook must be a function")
+    insert(loop_hooks, f)
+end
+
+function core.loop()
+    irc:process(client:receive())
+    if last_send < socket.gettime() and send_queue.first <= send_queue.last then
+        local last = send_queue.last
+        local message = send_queue[last]
+        send_queue[last] = nil
+        send_queue.last = last - 1
+        irc:send("PRIVMSG", config.channel, message)
+        last_send = socket.gettime()
+    end
+
+    for _,hook in ipairs(loop_hooks) do
+        hook()
+    end
 end
 
 return core
