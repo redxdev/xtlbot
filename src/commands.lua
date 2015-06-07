@@ -39,8 +39,6 @@ local function process_message(sender, origin, msg, pm)
             if not status then
                 print("Error while calling command " .. name .. ": " .. err)
                 core.send_to_user(sender[1], "There was a problem running that command.")
-            else
-                core.timeout(user.name)
             end
         else
             core.send_to_user(sender[1], lang.unknown_command)
