@@ -29,6 +29,7 @@ local db
 local send_queue = {first = 0, last = -1 }
 local last_send = 0
 
+local premsg_hooks = {}
 local msg_hooks = {}
 local loop_hooks = {}
 
@@ -74,6 +75,10 @@ function core.init()
     irc:set_callback("PRIVMSG", function(sender, origin, msg, pm)
         if config.show_messages then
             print(sender[1] .. ": " .. msg)
+        end
+
+        for _,hook in ipairs(premsg_hooks) do
+            if not hook(sender, origin, msg, pm) then return end
         end
 
         for _,hook in ipairs(msg_hooks) do
@@ -142,6 +147,11 @@ end
 
 function core.socket()
     return client
+end
+
+function core.hook_premessage(f)
+    assert(type(f) == "function", "premessage hook must be a function")
+    insert(premsg_hooks, f)
 end
 
 function core.hook_message(f)

@@ -136,4 +136,8 @@ function users.role_has_permission(role, permission)
     return false
 end
 
+function users.get_role(name)
+    return roles[name]
+end
+
 return users
