@@ -38,6 +38,8 @@ function core.init()
         error("Cannot re-initialize xtlbot when already running")
     end
 
+    math.randomseed(os.time())
+
     info.print_preamble()
 
     print("Loading database...")

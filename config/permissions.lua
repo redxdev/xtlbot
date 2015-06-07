@@ -11,7 +11,8 @@ local roles = {
             "util.help",
             "util.ping",
             "util.whoami",
-            "util.custom_command.use"
+            "util.custom_command.use",
+            "raffle.enter"
         },
         throttle = 1 -- 1 message per second
     },
@@ -27,7 +28,9 @@ local roles = {
         permissions = {
             "role.admin",
             "util.custom_command",
-            "util.timed_message"
+            "util.timed_message",
+            "raffle.start",
+            "raffle.end"
         },
         throttle = -1 -- no throttle
     },
