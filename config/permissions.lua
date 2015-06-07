@@ -8,7 +8,6 @@ local roles = {
     user = {
         permissions = {
             "role.user",
-            "util.help",
             "util.ping",
             "util.whoami",
             "util.custom_command.use",
@@ -38,6 +37,7 @@ local roles = {
         inherits = {"admin"},
         permissions = {
             "role.superadmin",
+            "util.help",
             "util.set_role",
             "util.set_mod"
         },
