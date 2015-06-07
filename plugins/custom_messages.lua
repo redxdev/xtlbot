@@ -51,7 +51,7 @@ local function cmd_custom(user, args)
             func = function() send_message(name) end
         }
 
-        commands.register(msg.command, msg.description, msg.func, "user")
+        commands.register(msg.command, msg.description, msg.func, "util.custom_command.use")
 
         -- meh
         stm = core.db():prepare("select id from custom_messages where command = ?")
@@ -96,7 +96,7 @@ function plugin.init()
         messages[name] = msg
     end
 
-    commands.register("custom", "create a custom command", cmd_custom, "admin")
+    commands.register("custom", "create a custom command", cmd_custom, "util.custom_command")
 end
 
 return plugin

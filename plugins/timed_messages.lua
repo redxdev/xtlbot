@@ -110,7 +110,7 @@ function plugin.init()
 
     core.hook_loop(message_loop)
 
-    commands.register("timed", "create a timed message", cmd_timed, "admin")
+    commands.register("timed", "create a timed message", cmd_timed, "util.timed_message")
 end
 
 return plugin

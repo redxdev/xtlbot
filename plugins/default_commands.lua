@@ -9,7 +9,7 @@ local plugin = {}
 
 local function cmd_help(user, args)
     for name,command in pairs(commands.list()) do
-        if users.has_role(user, command.role) then
+        if users.has_permission(user, command.permission) then
             core.send("!" .. name .. " - " .. command.help)
         end
     end
@@ -42,11 +42,11 @@ local function cmd_setmod(user, args)
 end
 
 function plugin.init()
-    commands.register("help", "displays the list of commands", cmd_help, "user")
-    commands.register("ping", "pong", cmd_ping, "user")
-    commands.register("whoami", "display your role", cmd_whoami, "user")
-    commands.register("role", "set a user's role", cmd_role, "superadmin")
-    commands.register("setmod", "set a user as a twitch mod", cmd_setmod, "superadmin")
+    commands.register("help", "displays the list of commands", cmd_help, "util.help")
+    commands.register("ping", "pong", cmd_ping, "util.ping")
+    commands.register("whoami", "display your role", cmd_whoami, "util.whoami")
+    commands.register("role", "set a user's role", cmd_role, "util.set_role")
+    commands.register("setmod", "set a user as a twitch mod", cmd_setmod, "util.set_mod")
 end
 
 return plugin

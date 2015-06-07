@@ -10,7 +10,7 @@ local sqlite3 = require("lsqlite3")
 
 local core
 local config = require("config.config")
-local roles = require("config.roles")
+local roles = require("config.permissions")
 
 local user_cache = {}
 setmetatable(user_cache, {__mode = 'v'}) -- weak table
@@ -107,17 +107,30 @@ function users.persist(user)
     end
 end
 
-function users.has_role(user, role)
+function users.has_permission(user, permission)
     assert(type(user) == "table")
-    return users.includes_role(user.role, role)
+    assert(type(permission) == "string")
+
+    return users.role_has_permission(user.role, permission)
 end
 
-function users.includes_role(parent, role)
-    if parent == role then return true end
+function users.role_has_permission(role, permission)
+    if type(role) == "string" then
+        role = roles[role]
+    end
 
-    local rh = roles[parent]
-    for _,r in ipairs(rh) do
-        if users.includes_role(r, role) then return true end
+    assert(type(role) == "table")
+
+    for _,v in ipairs(role.permissions) do
+        if v == permission then
+            return true
+        end
+    end
+
+    if not role.inherits then return false end
+
+    for _,inherited in ipairs(role.inherits) do
+        if(users.role_has_permission(inherited, permission)) then return true end
     end
 
     return false
