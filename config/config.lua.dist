@@ -1,0 +1,14 @@
+local config = {
+    server = "irc.twitch.tv",
+    port = 6667,
+    username = "REPLACE ME",
+    token = "REPLACE ME",
+    channel = "#REPLACE_ME",
+    show_messages = true,
+
+    -- DEBUG/SETUP STUFF
+    sudo = "REPLACE ME", -- makes this user have all permissions (this is NOT stored in the database)
+    debug_protocol = false -- shows all messages sent/received through irc
+}
+
+return config
