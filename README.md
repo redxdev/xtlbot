@@ -58,3 +58,7 @@ xtlbot is not nearly production ready. It is in the early stages of development 
 xtlbot includes a simple to use plugin system. Plugins are placed in the "plugins" directory. To enable a plugin, put
 the name of the lua file in "config/plugins.lua". The default set of xtlbot commands (help, whoami, role, ping) is
 implemented as the "default_commands" plugin if you want to see how it works.
+
+## Twitch
+
+Sometimes I stream development of xtlbot. Check it out at http://www.twitch.tv/xtlbot
