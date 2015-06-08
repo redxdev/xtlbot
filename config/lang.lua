@@ -10,6 +10,11 @@ local lang = {
     throttle = "You are sending too many messages. Wait %i seconds and try again.",
     throttle_command = "You are sending too many commands. Wait %i seconds and try again.",
 
+    timedmsg_already_exists = "A message with that name already exists!",
+    timedmsg_created = "Created timed message %s",
+    timedmsg_deleted = "Deleted timed message %s",
+    timedmsg_unknown = "Unknown timed message %s",
+
     filter_blocked = "You have said a bad word!",
     filter_already_blocked = "That word is already blocked!",
     filter_added_block = "Added blocked word.",

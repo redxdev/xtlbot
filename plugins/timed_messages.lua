@@ -11,6 +11,7 @@ local socket = require("socket")
 
 local core = require("src.core")
 local commands = require("src.commands")
+local lang = require("config.lang")
 
 local messages = {}
 
@@ -26,55 +27,63 @@ local function message_loop()
     end
 end
 
-local function cmd_timed(user, args)
-    if #args == 1 then
-        local name = args[1]
-        if messages[name] then
-            local id = messages[name].id
-            messages[name] = nil
-            local stm = core.db():prepare("delete from timed_messages where id = ?")
-            stm:bind(1, id)
-            for _ in stm:urows() do end
-            core.send_to_user(user.name, "Removed timed message " .. name)
-        else
-            core.sent_to_user(user.name, "unknown timed message " .. name)
-        end
-    elseif #args >= 3 then
-        local name = args[1]
-        if messages[name] then
-            core.send_to_user(user.name, "That message already exists!")
-            return
-        end
+local function cmd_addmessage(user, args)
+    if #args < 3 then
+        core.send_to_user(user.name, "!addmessage <name> <seconds> <message>")
+        return
+    end
 
-        local time = tonumber(args[2])
-        local message = concat(args, " ", 3)
-        local stm = core.db():prepare("insert into timed_messages (name, message, time) values (?, ?, ?)")
-        stm:bind(1, name)
-        stm:bind(2, message)
-        stm:bind(3, time)
+    local name = args[1]
+    if messages[name] then
+        core.send_to_user(user.name, lang.timedmsg_already_exists)
+        return
+    end
+
+    local time = tonumber(args[2])
+    local message = concat(args, " ", 3)
+    local stm = core.db():prepare("insert into timed_messages (name, message, time) values (?, ?, ?)")
+    stm:bind(1, name)
+    stm:bind(2, message)
+    stm:bind(3, time)
+    for _ in stm:urows() do end
+
+    local msg = {
+        message = message,
+        name = name,
+        time = time,
+        last_time_sent = socket.gettime(),
+    }
+
+    -- meh
+    stm = core.db():prepare("select id from timed_messages where name = ?")
+    stm:bind(1, name)
+    for id in stm:urows() do
+        msg.id = id
+    end
+
+    messages[name] = msg
+
+    core.send_to_user(user.name, lang.timedmsg_created:format(msg.name))
+
+    print(user.name .. " created timed message " .. name .. " with time " .. time .. " and contents " .. message)
+end
+
+local function cmd_delmessage(user, args)
+    if #args ~= 1 then
+        core.send_to_user(user.name, "!delmessage <name>")
+        return
+    end
+
+    local name = args[1]
+    if messages[name] then
+        local id = messages[name].id
+        messages[name] = nil
+        local stm = core.db():prepare("delete from timed_messages where id = ?")
+        stm:bind(1, id)
         for _ in stm:urows() do end
-
-        local msg = {
-            message = message,
-            name = name,
-            time = time,
-            last_time_sent = socket.gettime(),
-        }
-
-        -- meh
-        stm = core.db():prepare("select id from timed_messages where name = ?")
-        stm:bind(1, name)
-        for id in stm:urows() do
-            msg.id = id
-        end
-
-        messages[name] = msg
-
-        core.send_to_user(user.name, "Created timed message " .. name)
-
-        print(user.name .. " created timed message " .. name .. " with time " .. time .. " and contents " .. message)
+        core.send_to_user(user.name, lang.timedmsg_deleted:format(name))
     else
-        core.send_to_user(user.name, "!timed <name> <seconds> <message>")
+        core.send_to_user(user.name, lang.timedmsg_unknown:format(name))
     end
 end
 
@@ -110,7 +119,8 @@ function plugin.init()
 
     core.hook_loop(message_loop)
 
-    commands.register("timed", "create a timed message", cmd_timed, "util.timed_message")
+    commands.register("addmessage", "create a timed message", cmd_addmessage, "util.timed_message.add")
+    commands.register("delmessage", "delete a timed message", cmd_delmessage, "util.timed_message.delete")
 end
 
 return plugin
