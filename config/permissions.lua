@@ -12,7 +12,8 @@ local roles = {
             "util.ping",
             "util.whoami",
             "util.custom_command.use",
-            "raffle.enter"
+            "raffle.enter",
+            "poll.vote"
         },
         throttle = 1, -- 1 message per second
         command_throttle = 3
@@ -34,7 +35,9 @@ local roles = {
             "util.timed_message",
             "raffle.start",
             "raffle.end",
-            "raffle.cancel"
+            "raffle.cancel",
+            "poll.start",
+            "poll.end"
         },
         throttle = -1, -- no throttle
         command_throttle = -1

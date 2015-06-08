@@ -20,7 +20,20 @@ local lang = {
     raffle_already_entered = "You already entered the raffle",
     raffle_no_entries = "No one entered the raffle :(",
     raffle_winner = "The winner of the raffle is @%s",
-    raffle_canceled = "The raffle was canceled"
+    raffle_canceled = "The raffle was canceled",
+
+    poll_start = "A poll has been started, Say !vote <number> to vote: %s",
+    poll_list_options = "Poll: %s",
+    poll_alread_started = "This is already a poll going on!",
+    poll_empty_option = "You have an empty option in your poll!",
+    poll_single_option = "You only have one option in your poll!",
+    poll_not_running = "There is no poll going on right now!",
+    poll_invalid_option = "That's an invalid option to vote for.",
+    poll_repeat_option = "You already voted for that option.",
+    poll_changed_vote = "You have changed your vote to %s",
+    poll_voted = "You have voted for %s",
+    poll_winner = "The winner(s) of the poll is: %s",
+    poll_announce = "Say !vote <number> to vote on the poll: %s"
 }
 
 return lang

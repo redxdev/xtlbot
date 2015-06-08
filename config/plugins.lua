@@ -4,7 +4,8 @@ local plugins = {
     "default_commands",
     "custom_commands",
     "timed_messages",
-    "raffle"
+    "raffle",
+    "poll"
 }
 
 return plugins
