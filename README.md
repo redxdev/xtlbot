@@ -21,7 +21,7 @@ from the xtlbot installation directory script like so:
 
     lua configuration.lua
 
-You will need the oauth token for your bot, which can be found (here)[http://www.twitchapps.com/tmi/].
+You will need the oauth token for your bot, which can be found [here](http://www.twitchapps.com/tmi/).
 
 This script will set up a single admin user for you as well.
 
