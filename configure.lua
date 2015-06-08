@@ -179,5 +179,5 @@ db:close()
 print ""
 
 print "All done! xtlbot should be ready to go. You can launch xtlbot by running \"lua xtlbot.lua\" or you can run this configuration again."
-print "Have a nice day!"
+print "If you want to change what plugins are enabled or permission settings, check out the config directory. Otherwise, have fun!"
 -- done

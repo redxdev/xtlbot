@@ -16,28 +16,18 @@ can move onto configuration!
 
 ## Configuring
 
-### Main Configuration
+xtlbot now comes with a nice little configuration script! After installing dependencies, you can run the configuration
+from the xtlbot installation directory script like so:
 
-All configuration files are written in lua and are located in the "config" directory. The first thing you have to do to
-get xtlbot working is copy "config/config.lua.dist" to "config/config.lua" and edit it. Replace the username, token,
-and channel with the appropriate values for your bot. Set "sudo" to the name of the twitch user you want to have
-admin
+    lua configuration.lua
 
-#### sudo
+You will need the oauth token for your bot, which can be found (here)[http://www.twitchapps.com/tmi/].
 
-When you first setup xtlbot, you'll want to set sudo to either the bot's username or your username. Once you do, run the
-bot and run "!role <username> admin" in the channel the bot is monitoring. You should then set the value of sudo
-to "nil" (no quotes). If you do not do this, you will get a warning every time xtlbot starts up.
+This script will set up a single admin user for you as well.
 
-### Permissions
-
-You can find the permissions configuration in "config/permissions.lua". There is some documentation on how to configure
-roles and permissions within the file itself.
-
-### Language strings
-
-You can customize certain xtlbot chat messages by editing the files in "config/lang". Each plugin generally has its own
-language file.
+If the configuration script fails for some reason, you can just run it again. If you can't seem to get it to work, you
+can manually configure the bot by copying "config/config.lua.dist" to "config/config.lua" and editing it. You can use
+the "sudo" configuration option to temporarily mark a user as an admin so that you can use the !role command.
 
 ## Running
 
@@ -49,6 +39,25 @@ If all goes well, you should have this printed somewhere in your console with no
 
     Connecting to server irc.twitch.tv:6667
     Connection successful, logging in as <your bot name>
+
+## Configuration Files
+
+All configuration files are located in the "config" directory.
+
+### Main Configuration
+
+The main configuration file is "config/config.lua". If you haven't run the configuration script yet, it won't exist. You
+can copy "config/config.lua.dist" to "config/config.lua" if you don't want to run the configuration script.
+
+### Permissions
+
+You can find the permissions configuration in "config/permissions.lua". There is some documentation on how to configure
+roles and permissions within the file itself.
+
+### Language strings
+
+You can customize certain xtlbot chat messages by editing the files in "config/lang". Each plugin generally has its own
+language file.
 
 ## Are we there yet?
 
