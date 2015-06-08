@@ -13,7 +13,7 @@ local explode = string.explode
 
 local core
 local users = require("src.users")
-local lang = require("config.lang")
+local lang = require("src.lang")
 
 local command_list = {}
 
@@ -29,7 +29,7 @@ local function process_message(sender, origin, msg, pm)
             local command = command_list[name]
             local user = users.get(sender[1])
             if not users.has_permission(user, command.permission) then
-                core.send_to_user(user.name, lang.missing_permission)
+                core.send_to_user(user.name, lang.global.missing_permission)
                 return
             end
 
@@ -37,11 +37,11 @@ local function process_message(sender, origin, msg, pm)
             remove(arguments, 1)
             local status, err = pcall(command.callback, user, arguments)
             if not status then
-                print("Error while calling command " .. name .. ": " .. err)
+                print(err)
                 core.send_to_user(sender[1], "There was a problem running that command.")
             end
         else
-            core.send_to_user(sender[1], lang.unknown_command:format(name))
+            core.send_to_user(sender[1], lang.global.unknown_command:format(name))
         end
     end
 end

@@ -14,10 +14,10 @@ local sqlite3 = require("lsqlite3")
 
 local info = require("src.info")
 local config = require("config.config")
-local lang = require("config.lang")
 local plugins = require("config.plugins")
 local users = require("src.users")
 local commands = require("src.commands")
+local lang = require("src.lang")
 
 local core = {}
 
@@ -92,11 +92,21 @@ function core.init()
         end
 
         for _,hook in ipairs(premsg_hooks) do
-            if not hook(sender, origin, msg, pm) then return end
+            local status, result = pcall(hook, sender, origin, msg, pm)
+            if not status then
+                print(result)
+                return
+            end
+
+            if not result then return end
         end
 
         for _,hook in ipairs(msg_hooks) do
-            hook(sender, origin, msg, pm)
+            local status, result = pcall(hook, sender, origin, msg, pm)
+            if not status then
+                print(result)
+                return
+            end
         end
     end)
 
@@ -144,7 +154,7 @@ function core.send(message)
 end
 
 function core.send_to_user(user, message)
-    core.send(lang.to_user:format(user, message))
+    core.send(lang.global.to_user:format(user, message))
 end
 
 function core.timeout(user, n)
@@ -195,7 +205,11 @@ function core.loop()
     end
 
     for _,hook in ipairs(loop_hooks) do
-        hook()
+        local status, result = pcall(hook)
+        if not status then
+            print(result)
+            return
+        end
     end
 end
 

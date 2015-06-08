@@ -12,7 +12,7 @@ local socket = require("socket")
 local core = require("src.core")
 local users = require("src.users")
 local config = require("config.config")
-local lang = require("config.lang")
+local lang = require("src.lang")
 
 local recent_messages = {}
 local recent_commands = {}
@@ -102,7 +102,7 @@ function plugin.check_message(user, msg)
 
             if #recent >= 2 then
                 local tv = users.get_command_throttle(user.role)
-                core.send_to_user(user.name, lang.throttle_command)
+                core.send_to_user(user.name, lang.throttle.command)
                 core.timeout(user.name, tv)
                 print("Command throttled " .. user.name)
             end
@@ -117,7 +117,7 @@ function plugin.check_message(user, msg)
 
             if #recent >= 2 then
                 local tv = users.get_throttle(user.role)
-                core.send_to_user(user.name, lang.throttle:format(tv))
+                core.send_to_user(user.name, lang.throttle.too_fast:format(tv))
                 core.timeout(user.name, tv)
                 print("Throttled " .. user.name)
             end

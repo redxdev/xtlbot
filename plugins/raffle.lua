@@ -11,7 +11,7 @@ local socket = require("socket")
 
 local core = require("src.core")
 local commands = require("src.commands")
-local lang = require("config.lang")
+local lang = require("src.lang")
 
 local current_raffle
 
@@ -22,7 +22,7 @@ local function loop_hook()
 
     if current_raffle then
         if current_raffle.next_announce < currentTime then
-            core.send(lang.raffle_announce)
+            core.send(lang.raffle.announce)
             current_raffle.next_announce = currentTime + 20
         end
 
@@ -36,7 +36,7 @@ end
 
 local function cmd_raffle(user, args)
     if current_raffle then
-        core.send_to_user(user.name, lang.raffle_already_started)
+        core.send_to_user(user.name, lang.raffle.already_started)
         return
     end
 
@@ -48,41 +48,41 @@ local function cmd_raffle(user, args)
     if #args == 0 then
         current_raffle.mode = "manual"
 
-        core.send(lang.raffle_start)
+        core.send(lang.raffle.start)
     else
         local time = tonumber(args[1])
         if time < 1 then
-            core.send_to_user(user.name, lang.raffle_min_time:format(1))
+            core.send_to_user(user.name, lang.raffle.min_time:format(1))
             return
         end
 
         current_raffle.mode = "timed"
         current_raffle.end_time = socket.gettime() + time
 
-        core.send(lang.raffle_start_timed:format(time))
+        core.send(lang.raffle.start_timed:format(time))
     end
 end
 
 local function cmd_enter(user, args)
     if not current_raffle then
-        core.send_to_user(user.name, lang.raffle_not_running)
+        core.send_to_user(user.name, lang.raffle.not_running)
         return
     end
 
     for _,name in pairs(current_raffle.entries) do
         if name == user.name then
-            core.send_to_user(user.name, lang.raffle_already_entered)
+            core.send_to_user(user.name, lang.raffle.already_entered)
             return
         end
     end
 
     insert(current_raffle.entries, user.name)
-    core.send_to_user(user.name, lang.raffle_entered)
+    core.send_to_user(user.name, lang.raffle.entered)
 end
 
 local function cmd_endraffle(user, args)
     if not current_raffle then
-        core.send_to_user(user.name, lang.raffle_not_running)
+        core.send_to_user(user.name, lang.raffle.not_running)
         return
     end
 
@@ -91,12 +91,12 @@ end
 
 local function cmd_cancelraffle(user, args)
     if not current_raffle then
-        core.send_to_user(user.name, lang.raffle_not_running)
+        core.send_to_user(user.name, lang.raffle.not_running)
         return
     end
 
     current_raffle = nil
-    core.send(lang.raffle_canceled)
+    core.send(lang.raffle.canceled)
 end
 
 function plugin.init()
@@ -113,13 +113,13 @@ function plugin.end_raffle()
     current_raffle = nil
 
     if #entries == 0 then
-        core.send(lang.raffle_no_entries)
+        core.send(lang.raffle.no_entries)
         return
     end
 
     local idx = random(#entries)
     local winner = entries[idx]
-    core.send(lang.raffle_winner:format(winner))
+    core.send(lang.raffle.winner:format(winner))
 end
 
 return plugin

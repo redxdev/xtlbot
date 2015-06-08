@@ -8,7 +8,7 @@ local sqlite3 = require("lsqlite3")
 
 local core = require("src.core")
 local commands = require("src.commands")
-local lang = require("config.lang")
+local lang = require("src.lang")
 
 local messages = {}
 
@@ -22,7 +22,7 @@ local function cmd_addcom(user, args)
     if #args >= 2 then
         local name = args[1]
         if messages[name] then
-            core.send_to_user(user.name, lang.command_exists:format(name))
+            core.send_to_user(user.name, lang.custom_commands.exists:format(name))
             return
         end
 
@@ -51,7 +51,7 @@ local function cmd_addcom(user, args)
 
         messages[msg.command] = msg
 
-        core.send_to_user(user.name, lang.command_created:format(name))
+        core.send_to_user(user.name, lang.custom_commands.created:format(name))
     else
         core.sent_to_user(user.name, "!addcom <name> <response>")
     end
@@ -67,9 +67,9 @@ local function cmd_delcom(user, args)
             local stm = core.db():prepare("delete from custom_messages where id = ?")
             stm:bind(1, id)
             for _ in stm:urows() do end
-            core.send_to_user(user.name, lang.command_deleted:format(name))
+            core.send_to_user(user.name, lang.custom_commands.deleted:format(name))
         else
-            core.send_to_user(user.name, lang.unknown_command:format(name))
+            core.send_to_user(user.name, lang.global.unknown_command:format(name))
         end
     else
         core.send_to_user(user.name, "!delcom <name>")

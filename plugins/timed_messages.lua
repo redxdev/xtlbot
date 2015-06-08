@@ -11,7 +11,7 @@ local socket = require("socket")
 
 local core = require("src.core")
 local commands = require("src.commands")
-local lang = require("config.lang")
+local lang = require("src.lang")
 
 local messages = {}
 
@@ -35,7 +35,7 @@ local function cmd_addmessage(user, args)
 
     local name = args[1]
     if messages[name] then
-        core.send_to_user(user.name, lang.timedmsg_already_exists)
+        core.send_to_user(user.name, lang.timed_messages.already_exists)
         return
     end
 
@@ -63,7 +63,7 @@ local function cmd_addmessage(user, args)
 
     messages[name] = msg
 
-    core.send_to_user(user.name, lang.timedmsg_created:format(msg.name))
+    core.send_to_user(user.name, lang.timed_messages.created:format(msg.name))
 
     print(user.name .. " created timed message " .. name .. " with time " .. time .. " and contents " .. message)
 end
@@ -81,9 +81,9 @@ local function cmd_delmessage(user, args)
         local stm = core.db():prepare("delete from timed_messages where id = ?")
         stm:bind(1, id)
         for _ in stm:urows() do end
-        core.send_to_user(user.name, lang.timedmsg_deleted:format(name))
+        core.send_to_user(user.name, lang.timed_messages.deleted:format(name))
     else
-        core.send_to_user(user.name, lang.timedmsg_unknown:format(name))
+        core.send_to_user(user.name, lang.timed_messages.unknown:format(name))
     end
 end
 

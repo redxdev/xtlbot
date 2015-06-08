@@ -9,7 +9,8 @@ local config = {
 
     -- DEBUG/SETUP STUFF
     sudo = "REPLACE ME", -- makes this user have all permissions (this is NOT stored in the database)
-    debug_protocol = false -- shows all messages sent/received through irc
+    debug_protocol = false, -- shows all messages sent/received through irc
+    debug = true -- display debug messages in console
 }
 
 return config

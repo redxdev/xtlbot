@@ -10,7 +10,7 @@ local sqlite3 = require("lsqlite3")
 
 local core = require("src.core")
 local users = require("src.users")
-local lang = require("config.lang")
+local lang = require("src.lang")
 local commands = require("src.commands")
 
 local blocked_words = {}
@@ -25,7 +25,7 @@ local function premessage_hook(sender, origin, msg, pm)
 
     for _,v in ipairs(blocked_words) do
         if msg:find(v.word) ~= nil then
-            core.send_to_user(user.name, lang.filter_blocked)
+            core.send_to_user(user.name, lang.filter.blocked)
             core.timeout(user.name, 2)
             print("Blocked " .. user.name .. " from saying " .. v.word)
             return false
@@ -43,7 +43,7 @@ local function cmd_block(user, args)
 
     for _,v in ipairs(blocked_words) do
         if v.word == args[1] then
-            core.send_to_user(user.name, lang.filter_already_blocked)
+            core.send_to_user(user.name, lang.filter.already_blocked)
             core.timeout(user.name, 1)
             return
         end
@@ -64,7 +64,7 @@ local function cmd_block(user, args)
     end
 
     insert(blocked_words, data)
-    core.send_to_user(user.name, lang.filter_added_block)
+    core.send_to_user(user.name, lang.filter.added_word)
     core.timeout(user.name, 1)
     print(user.name .. " blocked word " .. data.word)
 end
@@ -85,7 +85,7 @@ local function cmd_unblock(user, args)
     end
 
     if not found then
-        core.send_to_user(user.name, lang.filter_not_blocked)
+        core.send_to_user(user.name, lang.filter.unknown_word)
         return
     end
 
@@ -93,7 +93,7 @@ local function cmd_unblock(user, args)
     stm:bind(1, found.id)
     for _ in stm:urows() do end
 
-    core.send_to_user(user.name, lang.filter_removed_block)
+    core.send_to_user(user.name, lang.filter.removed_word)
     print(user.name .. " unblocked word " .. found.word)
 end
 

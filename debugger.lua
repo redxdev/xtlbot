@@ -49,6 +49,10 @@ local function pretty(obj, non_recursive)
     end
 end
 
+local function escape_format(str)
+    return str:gsub("%%", "%%%%")
+end
+
 local help_message = [[
 [return] - re-run last command
 c(ontinue) - contiue execution
@@ -201,14 +205,14 @@ local function cmd_print(expr)
     if not results[1] then
         dbg_writeln(COLOR_RED.."Error:"..COLOR_RESET.." %s", results[2])
     elseif #results == 1 then
-        dbg_writeln(COLOR_BLUE..expr..COLOR_RED.." => "..COLOR_BLUE.."<no result>"..COLOR_RESET)
+        dbg_writeln(COLOR_BLUE..escape_format(expr)..COLOR_RED.." => "..COLOR_BLUE.."<no result>"..COLOR_RESET)
     else
         local result = ""
         for i = 2, #results do
             result = result..(i ~= 2 and ", " or "")..pretty(results[i])
         end
 
-        dbg_writeln(COLOR_BLUE..expr..COLOR_RED.." => "..COLOR_RESET..result)
+        dbg_writeln(COLOR_BLUE..escape_format(expr)..COLOR_RED.." => "..COLOR_RESET..escape_format(result))
     end
 
     return false

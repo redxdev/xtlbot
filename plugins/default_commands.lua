@@ -1,9 +1,11 @@
 local print = print
+local require = require
 local pairs = pairs
 
 local commands = require("src.commands")
 local core = require("src.core")
 local users = require("src.users")
+local lang = require("src.lang")
 
 local plugin = {}
 
@@ -16,11 +18,11 @@ local function cmd_help(user, args)
 end
 
 local function cmd_ping(user, args)
-    core.send_to_user(user.name, "pong!")
+    core.send_to_user(user.name, lang.default_commands.pong)
 end
 
 local function cmd_whoami(user, args)
-    core.send_to_user(user.name, "You are a " .. user.role)
+    core.send_to_user(user.name, lang.default_commands.whoami:format(user.role))
 end
 
 local function cmd_role(user, args)
@@ -29,7 +31,7 @@ local function cmd_role(user, args)
     local target = users.get(args[1])
     target.role = args[2]
     users.persist(target)
-    core.send_to_user(user.name, "Set " .. target.name .. "'s role to " .. target.role)
+    core.send_to_user(user.name, lang.default_commands.set_role:format(target.name, target.role))
     print(user.name .. " set " .. target.name .. "'s role to " .. target.role)
 end
 
@@ -37,7 +39,7 @@ local function cmd_setmod(user, args)
     if #args ~= 1 then core.send_to_user(user.name, "!setmod <user>") end
     local target = args[1]
     core.send(".mod " .. target)
-    core.send_to_user(user.name, "Set " .. target .. " as a twitch mod")
+    core.send_to_user(user.name, lang.default_commands.set_mod(target))
     print(user.name .. " set " .. target .. " as a twitch mod")
 end
 
