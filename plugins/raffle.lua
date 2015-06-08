@@ -12,6 +12,7 @@ local socket = require("socket")
 local core = require("src.core")
 local commands = require("src.commands")
 local lang = require("src.lang")
+local config = require("config.plugins.raffle")
 
 local current_raffle
 
@@ -21,9 +22,9 @@ local function loop_hook()
     local currentTime = socket.gettime()
 
     if current_raffle then
-        if current_raffle.next_announce < currentTime then
+        if current_raffle.next_announce < currentTime and config.announce_time > 0 then
             core.send(lang.raffle.announce)
-            current_raffle.next_announce = currentTime + 20
+            current_raffle.next_announce = currentTime + config.announce_time
         end
 
         if current_raffle.mode == "timed" then
@@ -42,7 +43,7 @@ local function cmd_raffle(user, args)
 
     current_raffle = {
         entries = {},
-        next_announce = socket.gettime() + 20
+        next_announce = socket.gettime() + config.announce_time
     }
 
     if #args == 0 then

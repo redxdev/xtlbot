@@ -13,6 +13,7 @@ local socket = require("socket")
 local core = require("src.core")
 local commands = require("src.commands")
 local lang = require("src.lang")
+local config = require("config.plugins.poll")
 
 local current_poll
 
@@ -38,9 +39,9 @@ local function loop_hook()
     local currentTime = socket.gettime()
 
     if current_poll then
-        if current_poll.next_announce < currentTime then
+        if current_poll.next_announce < currentTime and config.announce_time > 0 then
             core.send(lang.poll.announce:format(poll_options_str()))
-            current_poll.next_announce = currentTime + 20
+            current_poll.next_announce = currentTime + config.announce_time
         end
     end
 end
@@ -83,7 +84,7 @@ local function cmd_poll(user, args)
     current_poll = {
         results = {},
         options = options,
-        next_announce = socket.gettime() + 20
+        next_announce = socket.gettime() + config.announce_time
     }
 
     core.send(lang.poll.start:format(poll_options_str()))
