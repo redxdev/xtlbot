@@ -53,7 +53,7 @@ local roles = {
         inherits = {"trusted"},
         permissions = {
             "role.mod",
-            "filter.allow",
+            "filter.allow"
         },
         autosetmod = true, -- automatically set them as a moderator of the channel
         throttle = -1, -- no throttle
@@ -65,7 +65,6 @@ local roles = {
             "role.admin",
             "util.help",
             "util.set_role",
-            "util.set_mod",
             "util.stop",
             "raffle.start",
             "raffle.end",
@@ -79,6 +78,7 @@ local roles = {
             "timed_messages.list",
             "filter.block",
             "filter.unblock",
+            "twitch.mod"
         },
         autosetmod = true, -- automatically set them as a moderator of the channel
         throttle = -1, -- no throttle

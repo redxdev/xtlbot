@@ -41,14 +41,6 @@ local function cmd_role(user, args)
     print(user.name .. " set " .. target.name .. "'s role to " .. target.role)
 end
 
-local function cmd_setmod(user, args)
-    if #args ~= 1 then core.send_to_user(user.name, "!setmod <user>") end
-    local target = args[1]
-    core.send(".mod " .. target)
-    core.send_to_user(user.name, lang.default_commands.set_mod:format(target))
-    print(user.name .. " set " .. target .. " as a twitch mod")
-end
-
 local function cmd_stopbot(user, args)
     core.send(lang.default_commands.stop_bot)
     core.stop()
@@ -59,7 +51,6 @@ function plugin.init()
     commands.register("ping", "pong", cmd_ping, "util.ping")
     commands.register("whoami", "display your role", cmd_whoami, "util.whoami")
     commands.register("role", "set a user's role", cmd_role, "util.set_role")
-    commands.register("setmod", "set a user as a twitch mod", cmd_setmod, "util.set_mod")
     commands.register("stopbot", "stop xtlbot", cmd_stopbot, "util.stop")
 end
 
