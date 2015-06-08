@@ -5,6 +5,7 @@ local concat = table.concat
 local pairs = pairs
 local print = print
 local tonumber = tonumber
+local insert = table.insert
 
 local sqlite3 = require("lsqlite3")
 local socket = require("socket")
@@ -29,7 +30,7 @@ end
 
 local function cmd_addmessage(user, args)
     if #args < 3 then
-        core.send_to_user(user.name, "!addmessage <name> <seconds> <message>")
+        core.send_to_user(user.name, "!addmsg <name> <seconds> <message>")
         return
     end
 
@@ -70,7 +71,7 @@ end
 
 local function cmd_delmessage(user, args)
     if #args ~= 1 then
-        core.send_to_user(user.name, "!delmessage <name>")
+        core.send_to_user(user.name, "!delmsg <name>")
         return
     end
 
@@ -85,6 +86,15 @@ local function cmd_delmessage(user, args)
     else
         core.send_to_user(user.name, lang.timed_messages.unknown:format(name))
     end
+end
+
+local function cmd_listmsg(user, args)
+    local names = {}
+    for k,v in pairs(messages) do
+        insert(names, k)
+    end
+
+    core.send_to_user(user.name, lang.timed_messages.list:format(concat(names, ", ")))
 end
 
 function plugin.init()
@@ -119,8 +129,9 @@ function plugin.init()
 
     core.hook_loop(message_loop)
 
-    commands.register("addmessage", "create a timed message", cmd_addmessage, "util.timed_message.add")
-    commands.register("delmessage", "delete a timed message", cmd_delmessage, "util.timed_message.delete")
+    commands.register("addmsg", "create a timed message", cmd_addmessage, "timed_messages.add")
+    commands.register("delmsg", "delete a timed message", cmd_delmessage, "timed_messages.delete")
+    commands.register("listmsg", "list timed messages", cmd_listmsg, "timed_messages.list")
 end
 
 return plugin

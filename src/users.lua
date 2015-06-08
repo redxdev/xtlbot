@@ -43,7 +43,7 @@ function users.init(corelib)
     if config.sudo then
         print "!!! WARNING !!!"
         print "You have a sudo user set in config/config.lua"
-        print("You should run \"!role " .. config.sudo .. " superadmin\" as soon as possible.")
+        print("You should run \"!role " .. config.sudo .. " admin\" as soon as possible.")
         print "Then you can set sudo to nil."
     end
 end
@@ -53,7 +53,14 @@ function users.get(name)
         return user_cache[name]
     end
 
-    local stm = core.db():prepare("select * from users where username = ?")
+    if name:lower() == config.username:lower() then
+        return {
+            name = name,
+            role = "admin"
+        }
+    end
+
+    local stm = core.db():prepare("select * from users where username like ?")
     stm:bind(1, name)
     for u in stm:nrows() do
         local user = {
@@ -63,7 +70,7 @@ function users.get(name)
         }
 
         if name == config.sudo then
-            user.role = "superadmin"
+            user.role = "admin"
         end
 
         user_cache[name] = user
@@ -76,7 +83,7 @@ function users.get(name)
     }
 
     if name == config.sudo then
-        user.role = "superadmin"
+        user.role = "admin"
     end
 
     user_cache[name] = user
@@ -85,6 +92,10 @@ end
 
 function users.persist(user)
     assert(type(user) == "table")
+
+    if user.name:lower() == config.username:lower() then
+        return
+    end
 
     if user.id then
         local stm = core.db():prepare("update users set username = ?, role = ? where id = ?")
@@ -139,6 +150,10 @@ function users.role_has_permission(role, permission)
 end
 
 function users.get_role(name)
+    if not roles[name] then
+        print("invalid role " .. name ", using 'user'")
+        return roles["user"]
+    end
     return roles[name]
 end
 

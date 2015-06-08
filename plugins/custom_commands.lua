@@ -3,6 +3,8 @@ local require = require
 local error = error
 local concat = table.concat
 local print = print
+local pairs = pairs
+local insert = table.insert
 
 local sqlite3 = require("lsqlite3")
 
@@ -40,7 +42,7 @@ local function cmd_addcom(user, args)
             func = function() send_message(name) end
         }
 
-        commands.register(msg.command, msg.description, msg.func, "util.custom_command.use")
+        commands.register(msg.command, msg.description, msg.func, "custom_commands.use")
 
         -- meh
         stm = core.db():prepare("select id from custom_messages where command = ?")
@@ -76,6 +78,15 @@ local function cmd_delcom(user, args)
     end
 end
 
+local function cmd_listcom(user, args)
+    local names = {}
+    for k,v in pairs(messages) do
+        insert(names, "!" .. k)
+    end
+
+    core.send_to_user(user.name, lang.custom_commands.list:format(concat(names, ", ")))
+end
+
 function plugin.init()
     local sql = [[
         create table if not exists custom_messages
@@ -100,12 +111,13 @@ function plugin.init()
             command = name,
             func = function() send_message(name) end
         }
-        commands.register(name, v.description, msg.func, "util.custom_command.use")
+        commands.register(name, v.description, msg.func, "custom_commands.use")
         messages[name] = msg
     end
 
-    commands.register("addcom", "create a custom command", cmd_addcom, "util.custom_command.add")
-    commands.register("delcom", "delete a custom command", cmd_delcom, "util.custom_command.delete")
+    commands.register("addcom", "create a custom command", cmd_addcom, "custom_commands.add")
+    commands.register("delcom", "delete a custom command", cmd_delcom, "custom_commands.delete")
+    commands.register("listcom", "list custom commands", cmd_listcom, "custom_commands.list")
 end
 
 return plugin

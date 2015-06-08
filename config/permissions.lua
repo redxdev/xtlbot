@@ -3,7 +3,7 @@ User Permissions Guide
 ----------------------
 
 Each key of the "roles" table is the name of a user role (used in the !role command).
-There are two roles that are required to exist: "user" and "superadmin". The user role
+There are two roles that are required to exist: "user" and "admin". The user role
 is given to all users unless you set their role with !role, while the superadmin
 permission is given to the user who is specified in config.lua (under config.sudo).
 
@@ -32,18 +32,30 @@ local roles = {
             "role.user",
             "util.ping",
             "util.whoami",
-            "util.custom_command.use",
+            "custom_commands.use",
             "raffle.enter",
             "poll.vote"
         },
         throttle = 1, -- 1 message per second
         command_throttle = 3
     },
-    mod = {
+    trusted = {
         inherits = {"user"},
         permissions = {
-            "role.mod"
+            "role.trusted",
+            "filter.bypass",
+            "custom_commands.list"
         },
+        throttle = -1, -- no throttle
+        command_throttle = -1
+    },
+    mod = {
+        inherits = {"trusted"},
+        permissions = {
+            "role.mod",
+            "filter.allow",
+        },
+        autosetmod = true, -- automatically set them as a moderator of the channel
         throttle = -1, -- no throttle
         command_throttle = -1
     },
@@ -51,31 +63,24 @@ local roles = {
         inherits = {"mod"},
         permissions = {
             "role.admin",
-            "filter.bypass",
-            "filter.block",
-            "filter.unblock",
-            "util.custom_command.add",
-            "util.custom_command.delete",
-            "util.timed_message.add",
-            "util.timed_message.delete",
+            "util.help",
+            "util.set_role",
+            "util.set_mod",
+            "util.stop",
             "raffle.start",
             "raffle.end",
             "raffle.cancel",
             "poll.start",
-            "poll.end"
+            "poll.end",
+            "custom_commands.add",
+            "custom_commands.delete",
+            "timed_messages.add",
+            "timed_messages.delete",
+            "timed_messages.list",
+            "filter.block",
+            "filter.unblock",
         },
-        throttle = -1, -- no throttle
-        command_throttle = -1
-    },
-    superadmin = {
-        inherits = {"admin"},
-        permissions = {
-            "role.superadmin",
-            "util.help",
-            "util.set_role",
-            "util.set_mod",
-            "util.stop"
-        },
+        autosetmod = true, -- automatically set them as a moderator of the channel
         throttle = -1, -- no throttle
         command_throttle = -1
     }

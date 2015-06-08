@@ -31,6 +31,12 @@ local function cmd_role(user, args)
     local target = users.get(args[1])
     target.role = args[2]
     users.persist(target)
+
+    local role = users.get_role(target.role)
+    if role.autosetmod then
+        core.send(".mod " .. target.name)
+    end
+
     core.send_to_user(user.name, lang.default_commands.set_role:format(target.name, target.role))
     print(user.name .. " set " .. target.name .. "'s role to " .. target.role)
 end
@@ -39,7 +45,7 @@ local function cmd_setmod(user, args)
     if #args ~= 1 then core.send_to_user(user.name, "!setmod <user>") end
     local target = args[1]
     core.send(".mod " .. target)
-    core.send_to_user(user.name, lang.default_commands.set_mod(target))
+    core.send_to_user(user.name, lang.default_commands.set_mod:format(target))
     print(user.name .. " set " .. target .. " as a twitch mod")
 end
 

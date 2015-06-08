@@ -77,11 +77,19 @@ function core.init()
         assert(irc:JOIN(config.channel))
     end)
 
-    if config.show_join_leave then
-        irc:set_callback("JOIN", function(sender)
+    irc:set_callback("JOIN", function(sender)
+        if config.show_join_leave then
             print(sender[1] .. " joined")
-        end)
+        end
 
+        local user = users.get(sender[1])
+        local role = users.get_role(user.role)
+        if role.autosetmod then
+            core.send(".mod " .. user.name)
+        end
+    end)
+
+    if config.show_join_leave then
         irc:set_callback("PART", function(sender)
             print(sender[1] .. " left")
         end)

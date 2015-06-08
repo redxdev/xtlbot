@@ -21,12 +21,12 @@ can move onto configuration!
 All configuration files are written in lua and are located in the "config" directory. The first thing you have to do to
 get xtlbot working is copy "config/config.lua.dist" to "config/config.lua" and edit it. Replace the username, token,
 and channel with the appropriate values for your bot. Set "sudo" to the name of the twitch user you want to have
-superadmin
+admin
 
 #### sudo
 
 When you first setup xtlbot, you'll want to set sudo to either the bot's username or your username. Once you do, run the
-bot and run "!role <username> superadmin" in the channel the bot is monitoring. You should then set the value of sudo
+bot and run "!role <username> admin" in the channel the bot is monitoring. You should then set the value of sudo
 to "nil" (no quotes). If you do not do this, you will get a warning every time xtlbot starts up.
 
 ### Permissions
