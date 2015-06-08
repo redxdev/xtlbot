@@ -1,7 +1,28 @@
+--[[
+User Permissions Guide
+----------------------
+
+Each key of the "roles" table is the name of a user role (used in the !role command).
+There are two roles that are required to exist: "user" and "superadmin". The user role
+is given to all users unless you set their role with !role, while the superadmin
+permission is given to the user who is specified in config.lua (under config.sudo).
+
+Actual permissions are specified by adding a permissions key to a role. The permissions
+key should be a list of permissions to give to that role.
+
+If the role should inherit permissions from another role, then the "inherits" key should
+be set to a list of the names of roles.
+
+Some plugins may also allow you to define additional keys for each role, such as the
+"throttle" and "command_throttle" keys which are used by the throttle plugin. Check
+the plugin's documentation to see what options you can specify, and if those options
+are inherited through the role hierarchy.
+]]
+
 local roles = {
-    locked = {
+    limited = {
         permissions = {
-            "role.locked"
+            "role.limietd"
         },
         throttle = 10, -- 1 message per 10 seconds
         command_throttle = 20

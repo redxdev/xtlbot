@@ -121,6 +121,8 @@ function users.role_has_permission(role, permission)
 
     assert(type(role) == "table")
 
+    if not role.permissions then return false end
+
     for _,v in ipairs(role.permissions) do
         if v == permission then
             return true
