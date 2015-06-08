@@ -18,21 +18,31 @@ local current_raffle
 local plugin = {}
 
 local function loop_hook()
-    if current_raffle and current_raffle.mode == "timed" then
-        local currentTime = socket.gettime()
-        if current_raffle.end_time < currentTime then
-            plugin.end_raffle()
+    local currentTime = socket.gettime()
+
+    if current_raffle then
+        if current_raffle.next_announce < currentTime then
+            core.send(lang.raffle_announce)
+            current_raffle.next_announce = currentTime + 20
+        end
+
+        if current_raffle.mode == "timed" then
+            if current_raffle.end_time < currentTime then
+                plugin.end_raffle()
+            end
         end
     end
 end
 
 local function cmd_raffle(user, args)
     if current_raffle then
-
+        core.send_to_user(user.name, lang.raffle_already_started)
+        return
     end
 
     current_raffle = {
-        entries = {}
+        entries = {},
+        next_announce = socket.gettime() + 20
     }
 
     if #args == 0 then

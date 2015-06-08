@@ -11,6 +11,8 @@ local lang = {
     throttle_command = "You are sending too many commands. Wait %i seconds and try again.",
 
     raffle_start = "A raffle has started! Say !enter to join!",
+    raffle_already_started = "There is already a raffle going on!",
+    raffle_announce = "There is a raffle going on! Say !enter to join!",
     raffle_min_time = "Raffle time must be at least %i seconds",
     raffle_start_timed = "A raffle has started! You have %i seconds to join by saying !enter",
     raffle_not_running = "There is no raffle going on right now!",
