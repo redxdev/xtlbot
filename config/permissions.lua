@@ -30,6 +30,9 @@ local roles = {
         inherits = {"mod"},
         permissions = {
             "role.admin",
+            "filter.bypass",
+            "filter.block",
+            "filter.unblock",
             "util.custom_command.add",
             "util.custom_command.delete",
             "util.timed_message",

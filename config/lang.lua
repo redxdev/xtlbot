@@ -10,6 +10,12 @@ local lang = {
     throttle = "You are sending too many messages. Wait %i seconds and try again.",
     throttle_command = "You are sending too many commands. Wait %i seconds and try again.",
 
+    filter_blocked = "You have said a bad word!",
+    filter_already_blocked = "That word is already blocked!",
+    filter_added_block = "Added blocked word.",
+    filter_removed_block = "Removed blocked word.",
+    filter_not_blocked = "That word isn't blocked!",
+
     raffle_start = "A raffle has started! Say !enter to join!",
     raffle_already_started = "There is already a raffle going on!",
     raffle_announce = "There is a raffle going on! Say !enter to join!",

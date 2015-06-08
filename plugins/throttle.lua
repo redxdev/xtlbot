@@ -1,7 +1,6 @@
 -- xtlbot message throttling
 local require = require
 local print = print
-local error = error
 local assert = assert
 local insert = table.insert
 local pairs = pairs
