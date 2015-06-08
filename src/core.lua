@@ -33,6 +33,8 @@ local premsg_hooks = {}
 local msg_hooks = {}
 local loop_hooks = {}
 
+local loaded_plugins = {}
+
 function core.init()
     if running then
         error("Cannot re-initialize xtlbot when already running")
@@ -74,6 +76,16 @@ function core.init()
         assert(irc:JOIN(config.channel))
     end)
 
+    if config.show_join_leave then
+        irc:set_callback("JOIN", function(sender)
+            print(sender[1] .. " joined")
+        end)
+
+        irc:set_callback("PART", function(sender)
+            print(sender[1] .. " left")
+        end)
+    end
+
     irc:set_callback("PRIVMSG", function(sender, origin, msg, pm)
         if config.show_messages then
             print(sender[1] .. ": " .. msg)
@@ -104,6 +116,7 @@ function core.init()
         print("Loading plugin " .. name)
         local plugin = require("plugins." .. name)
         plugin.init()
+        loaded_plugins[name] = plugin
     end
 
     while running do
@@ -149,6 +162,10 @@ end
 
 function core.socket()
     return client
+end
+
+function core.getplugin(name)
+    return loaded_plugins[name]
 end
 
 function core.hook_premessage(f)

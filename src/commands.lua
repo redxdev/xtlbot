@@ -41,7 +41,7 @@ local function process_message(sender, origin, msg, pm)
                 core.send_to_user(sender[1], "There was a problem running that command.")
             end
         else
-            core.send_to_user(sender[1], lang.unknown_command)
+            core.send_to_user(sender[1], lang.unknown_command:format(name))
         end
     end
 end

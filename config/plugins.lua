@@ -2,7 +2,7 @@
 local plugins = {
     "throttle",
     "default_commands",
-    "custom_messages",
+    "custom_commands",
     "timed_messages",
     "raffle"
 }

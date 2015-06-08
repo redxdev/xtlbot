@@ -5,6 +5,7 @@ local config = {
     token = "REPLACE ME",
     channel = "#REPLACE_ME",
     show_messages = true,
+    show_join_leave = false,
 
     -- DEBUG/SETUP STUFF
     sudo = "REPLACE ME", -- makes this user have all permissions (this is NOT stored in the database)
