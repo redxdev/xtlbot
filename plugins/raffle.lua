@@ -27,6 +27,10 @@ local function loop_hook()
 end
 
 local function cmd_raffle(user, args)
+    if current_raffle then
+
+    end
+
     current_raffle = {
         entries = {}
     }
@@ -38,7 +42,7 @@ local function cmd_raffle(user, args)
     else
         local time = tonumber(args[1])
         if time < 1 then
-            core.send_to_user(user.name, "Raffle time must be at least 1 second")
+            core.send_to_user(user.name, lang.raffle_min_time:format(1))
             return
         end
 
@@ -75,12 +79,23 @@ local function cmd_endraffle(user, args)
     plugin.end_raffle()
 end
 
+local function cmd_cancelraffle(user, args)
+    if not current_raffle then
+        core.send_to_user(user.name, lang.raffle_not_running)
+        return
+    end
+
+    current_raffle = nil
+    core.send(lang.raffle_canceled)
+end
+
 function plugin.init()
     core.hook_loop(loop_hook)
 
     commands.register("raffle", "start a raffle", cmd_raffle, "raffle.start")
     commands.register("endraffle", "end a raffle", cmd_endraffle, "raffle.end")
     commands.register("enter", "enter a raffle", cmd_enter, "raffle.enter")
+    commands.register("cancelraffle", "cancel a raffle", cmd_cancelraffle, "raffle.cancel")
 end
 
 function plugin.end_raffle()
@@ -88,13 +103,13 @@ function plugin.end_raffle()
     current_raffle = nil
 
     if #entries == 0 then
-        core.send("No one entered the raffle :(")
+        core.send(lang.raffle_no_entries)
         return
     end
 
     local idx = random(#entries)
     local winner = entries[idx]
-    core.send("The winner of the raffle is @" .. winner .. "!")
+    core.send(lang.raffle_winner:format(winner))
 end
 
 return plugin

@@ -33,7 +33,8 @@ local roles = {
             "util.custom_command.delete",
             "util.timed_message",
             "raffle.start",
-            "raffle.end"
+            "raffle.end",
+            "raffle.cancel"
         },
         throttle = -1, -- no throttle
         command_throttle = -1

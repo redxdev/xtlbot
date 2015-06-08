@@ -11,10 +11,14 @@ local lang = {
     throttle_command = "You are sending too many commands. Wait %i seconds and try again.",
 
     raffle_start = "A raffle has started! Say !enter to join!",
+    raffle_min_time = "Raffle time must be at least %i seconds",
     raffle_start_timed = "A raffle has started! You have %i seconds to join by saying !enter",
     raffle_not_running = "There is no raffle going on right now!",
     raffle_entered = "You have entered the raffle!",
-    raffle_already_entered = "You already entered the raffle"
+    raffle_already_entered = "You already entered the raffle",
+    raffle_no_entries = "No one entered the raffle :(",
+    raffle_winner = "The winner of the raffle is @%s",
+    raffle_canceled = "The raffle was canceled"
 }
 
 return lang
