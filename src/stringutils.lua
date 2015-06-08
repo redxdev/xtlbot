@@ -15,8 +15,7 @@ function string.explode(div, str)
 end
 
 -- thank you http://stackoverflow.com/a/23592008/646180
-function string.has_url(str)
-    local domains = [[.ac.ad.ae.aero.af.ag.ai.al.am.an.ao.aq.ar.arpa.as.asia.at.au
+local domains = [[.ac.ad.ae.aero.af.ag.ai.al.am.an.ao.aq.ar.arpa.as.asia.at.au
    .aw.ax.az.ba.bb.bd.be.bf.bg.bh.bi.biz.bj.bm.bn.bo.br.bs.bt.bv.bw.by.bz.ca
    .cat.cc.cd.cf.cg.ch.ci.ck.cl.cm.cn.co.com.coop.cr.cs.cu.cv.cx.cy.cz.dd.de
    .dj.dk.dm.do.dz.ec.edu.ee.eg.eh.er.es.et.eu.fi.firm.fj.fk.fm.fo.fr.fx.ga
@@ -29,12 +28,13 @@ function string.has_url(str)
    .sl.sm.sn.so.sr.ss.st.store.su.sv.sy.sz.tc.td.tel.tf.tg.th.tj.tk.tl.tm.tn
    .to.tp.tr.travel.tt.tv.tw.tz.ua.ug.uk.um.us.uy.va.vc.ve.vg.vi.vn.vu.web.wf
    .ws.xxx.ye.yt.yu.za.zm.zr.zw]]
-    local tlds = {}
-    for tld in domains:gmatch'%w+' do
-        tlds[tld] = true
-    end
-    local protocols = {[''] = 0, ['http://'] = 0, ['https://'] = 0, ['ftp://'] = 0}
+local tlds = {}
+for tld in domains:gmatch'%w+' do
+    tlds[tld] = true
+end
+local protocols = {[''] = 0, ['http://'] = 0, ['https://'] = 0, ['ftp://'] = 0 }
 
+function string.has_url(str)
     for pos, url, prot, subd, tld, colon, port, slash, path in str:gmatch
         '()(([%w_.~!*:@&+$/?%%#-]-)(%w[-.%w]*%.)(%w+)(:?)(%d*)(/?)([%w_.~!*:@&+$/?%%#=-]*))'
     do
