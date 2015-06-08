@@ -4,8 +4,13 @@ local config = {
     username = "%USERNAME%",
     token = "%TOKEN%",
     channel = "#%CHANNEL%",
-    show_messages = true,
-    show_join_leave = false,
+
+    show_messages = true, -- if true, this will show chat messages in the console
+    show_join_leave = true, -- if true, this will show join/leave messages in the console
+
+    unknown_command = true, -- if true, this will respond to unknown commands with a message in chat.
+                            -- disable this option if you use other bots with commands not registered to
+                            -- xtlbot.
 
     -- DEBUG/SETUP STUFF
     sudo = nil, -- makes this user have the admin role (this is NOT stored in the database)

@@ -14,6 +14,7 @@ local explode = string.explode
 local core
 local users = require("src.users")
 local lang = require("src.lang")
+local config = require("config.config")
 
 local command_list = {}
 
@@ -40,7 +41,7 @@ local function process_message(sender, origin, msg, pm)
                 print(err)
                 core.send_to_user(sender[1], "There was a problem running that command.")
             end
-        else
+        elseif config.unknown_command then
             core.send_to_user(sender[1], lang.global.unknown_command:format(name))
         end
     end
