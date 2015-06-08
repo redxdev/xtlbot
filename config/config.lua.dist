@@ -1,18 +1,16 @@
--- Copy this file to config.lua and edit
-
 local config = {
     server = "irc.twitch.tv",
     port = 6667,
-    username = "REPLACE ME",
-    token = "REPLACE ME",
-    channel = "#REPLACE_ME",
+    username = "%USERNAME%",
+    token = "%TOKEN%",
+    channel = "#%CHANNEL%",
     show_messages = true,
     show_join_leave = false,
 
     -- DEBUG/SETUP STUFF
-    sudo = "REPLACE ME", -- makes this user have all permissions (this is NOT stored in the database)
+    sudo = nil, -- makes this user have the admin role (this is NOT stored in the database)
     debug_protocol = false, -- shows all messages sent/received through irc
-    debug = true -- display debug messages in console
+    debug = false -- display debug messages in console
 }
 
 return config
