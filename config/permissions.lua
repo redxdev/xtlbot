@@ -73,7 +73,8 @@ local roles = {
             "role.superadmin",
             "util.help",
             "util.set_role",
-            "util.set_mod"
+            "util.set_mod",
+            "util.stop"
         },
         throttle = -1, -- no throttle
         command_throttle = -1

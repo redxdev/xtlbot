@@ -32,6 +32,7 @@ local last_send = 0
 local premsg_hooks = {}
 local msg_hooks = {}
 local loop_hooks = {}
+local stop_hooks = {}
 
 local loaded_plugins = {}
 
@@ -137,14 +138,27 @@ function core.init()
         end
     end
 
-    print "Shutting down xtlbot"
-    irc:PART()
+    print "xtlbot is stopping!"
+
+    print "Running stop hooks..."
+
+    for _,hook in ipairs(stop_hooks) do
+        local status, err = pcall(hook)
+        if not status then print(err) end
+    end
+
+    print "Disconnecting..."
     client:close()
+
+    print "Closing database..."
     db:close()
+
+    print "Goodbye!"
 end
 
 function core.stop()
     print("Stopping xtlbot")
+    running = false
 end
 
 function core.send(message)
@@ -191,6 +205,11 @@ end
 function core.hook_loop(f)
     assert(type(f) == "function", "loop hook must be a function")
     insert(loop_hooks, f)
+end
+
+function core.hook_stop(f)
+    assert(type(f) == "function", "stop hook must be a function")
+    insert(stop_hooks, f)
 end
 
 function core.loop()

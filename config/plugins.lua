@@ -1,4 +1,5 @@
--- list all enabled plugins here
+-- List all plugins you want to enable here.
+
 local plugins = {
     "throttle",
     "filter",

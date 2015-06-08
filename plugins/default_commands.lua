@@ -43,12 +43,18 @@ local function cmd_setmod(user, args)
     print(user.name .. " set " .. target .. " as a twitch mod")
 end
 
+local function cmd_stopbot(user, args)
+    core.send(lang.default_commands.stop_bot)
+    core.stop()
+end
+
 function plugin.init()
     commands.register("help", "displays the list of commands", cmd_help, "util.help")
     commands.register("ping", "pong", cmd_ping, "util.ping")
     commands.register("whoami", "display your role", cmd_whoami, "util.whoami")
     commands.register("role", "set a user's role", cmd_role, "util.set_role")
     commands.register("setmod", "set a user as a twitch mod", cmd_setmod, "util.set_mod")
+    commands.register("stopbot", "stop xtlbot", cmd_stopbot, "util.stop")
 end
 
 return plugin

@@ -1,6 +1,6 @@
 # eXtendable Twitch Lua Bot
 
-xtlbot is a highly configurable twitch bot made with moderation capabilities in mind. It is written in Lua (for 5.1).
+xtlbot is a configurable twitch bot made with moderation capabilities in mind. It is written in Lua (5.1).
 Currently, a single instance of xtlbot can only work with a single channel at a time.
 
 ## Installation
@@ -29,14 +29,15 @@ When you first setup xtlbot, you'll want to set sudo to either the bot's usernam
 bot and run "!role <username> superadmin" in the channel the bot is monitoring. You should then set the value of sudo
 to "nil" (no quotes). If you do not do this, you will get a warning every time xtlbot starts up.
 
-### Roles
+### Permissions
 
-The role hierarchy can be configured in "config/roles.lua". Generally, you want to leave this alone. Each key is a table
-with a list of roles it inherits from.
+You can find the permissions configuration in "config/permissions.lua". There is some documentation on how to configure
+roles and permissions within the file itself.
 
-### Language
+### Language strings
 
-You can customize certain xtlbot chat messages by editing "config/lang.lua".
+You can customize certain xtlbot chat messages by editing the files in "config/lang". Each plugin generally has its own
+language file.
 
 ## Running
 
@@ -55,9 +56,11 @@ xtlbot is not nearly production ready. It is in the early stages of development 
 
 ## Plugins
 
-xtlbot includes a simple to use plugin system. Plugins are placed in the "plugins" directory. To enable a plugin, put
-the name of the lua file in "config/plugins.lua". The default set of xtlbot commands (help, whoami, role, ping) is
-implemented as the "default_commands" plugin if you want to see how it works.
+xtlbot includes a simple to use plugin system. Plugin logic is placed in lua files in the "plugins" directory. Plugins
+may also have files that go in the "config/lang" and "config/plugins" directory. To enable a plugin, add the name of it
+to "config/plugins.lua".
+
+If you want to see how to write a plugin, take a look at the default set of plugins provided in the "plugins" directory.
 
 ## Twitch
 

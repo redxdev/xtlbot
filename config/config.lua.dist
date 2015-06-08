@@ -1,3 +1,5 @@
+-- Copy this file to config.lua and edit
+
 local config = {
     server = "irc.twitch.tv",
     port = 6667,
