@@ -1,5 +1,6 @@
 -- xtlbot configuration script
 
+require("src.stringutils")
 local info = require("src.info")
 
 local function file_exists(name)
@@ -39,67 +40,9 @@ if file_exists("config/config.lua") then
     config_exists = true
 end
 
+local skip_config = false
 if config_exists then
-    print "It looks like xtlbot is already configured. Are you sure you want to overwrite the configuration files?"
-    local answer
-    repeat
-        io.write ">> "
-        io.flush()
-        answer = io.read()
-        answer = answer:lower()
-    until answer == "y" or answer == "n" or answer == "yes" or answer == "no"
-    if answer == "n" or answer == "no" then
-        print "Exiting!"
-        return
-    end
-    print ""
-end
-
-print "First thing's first, we need to setup the main configuration."
-
-local username
-local token
-local channel
-
-local retry = true
-repeat
-    print "What is the username of the bot?"
-    io.write ">> "
-    io.flush()
-    username = io.read()
-
-    print ""
-
-    local oauth_ok = false
-    repeat
-        print "What is the oauth token for the bot? If you don't have a token, you can get one at http://www.twitchapps.com/tmi/"
-        print "The token looks like this: oauth:zabcdef1234asdfghjklqwe4r56yui"
-        io.write ">> "
-        io.flush()
-        token = io.read()
-        if token:sub(1, 6) == "oauth:" and #token == 36 then
-            oauth_ok = true
-        else
-            print ""
-            print "That oauth token doesn't look right, let's try again."
-            oauth_ok = false
-        end
-    until oauth_ok == true
-
-    print ""
-
-    print "What channel should the bot watch? This should be the username of the channel (i.e. xtlbot for the xtlbot channel)"
-    io.write ">> "
-    io.flush()
-    channel = io.read()
-
-    print ""
-
-    print "Let's make sure everything is correct."
-    print("  username: " .. username)
-    print("  token: " .. token)
-    print("  channel: " .. channel)
-    print "Does that all look correct?"
+    print "It looks like xtlbot is already configured. Do you want to skip the configuration step?"
     local answer
     repeat
         io.write ">> "
@@ -108,44 +51,96 @@ repeat
         answer = answer:lower()
     until answer == "y" or answer == "n" or answer == "yes" or answer == "no"
     if answer == "y" or answer == "yes" then
-        retry = false
+        skip_config = true
     end
-until not retry
-
-print ""
-
-print "Ok, give me a moment while I make your config file..."
-
-local config_dist = io.open("config/config.lua.dist", "r")
-if not config_dist then
-    print "Uh oh! I couldn't read config/config.lua.dist. I suggest trying to download it from https://github.com/redxdev/xtlbot/blob/master/config/config.lua.dist and running this script again."
-    return
+    print ""
 end
 
-local config = config_dist:read("*all")
-config_dist:close()
+if not skip_config then
+    print "First thing's first, we need to setup the main configuration."
 
-config = config:gsub("%%USERNAME%%", username):gsub("%%TOKEN%%", token):gsub("%%CHANNEL%%", channel)
+    local username
+    local token
+    local channel
 
-local config_file = io.open("config/config.lua", "w+")
-if not config_file then
-    print "Uh oh! I couldn't write config/config.lua. Make sure I have permission and nothing else is using the file!"
-    return
+    local retry = true
+    repeat
+        print "What is the username of the bot?"
+        io.write ">> "
+        io.flush()
+        username = io.read()
+
+        print ""
+
+        local oauth_ok = false
+        repeat
+            print "What is the oauth token for the bot? If you don't have a token, you can get one at http://www.twitchapps.com/tmi/"
+            print "The token looks like this: oauth:zabcdef1234asdfghjklqwe4r56yui"
+            io.write ">> "
+            io.flush()
+            token = io.read()
+            if token:sub(1, 6) == "oauth:" and #token == 36 then
+                oauth_ok = true
+            else
+                print ""
+                print "That oauth token doesn't look right, let's try again."
+                oauth_ok = false
+            end
+        until oauth_ok == true
+
+        print ""
+
+        print "What channel should the bot watch? This should be the username of the channel (i.e. xtlbot for the xtlbot channel)"
+        io.write ">> "
+        io.flush()
+        channel = io.read()
+
+        print ""
+
+        print "Let's make sure everything is correct."
+        print("  username: " .. username)
+        print("  token: " .. token)
+        print("  channel: " .. channel)
+        print "Does that all look correct?"
+        local answer
+        repeat
+            io.write ">> "
+            io.flush()
+            answer = io.read()
+            answer = answer:lower()
+        until answer == "y" or answer == "n" or answer == "yes" or answer == "no"
+        if answer == "y" or answer == "yes" then
+            retry = false
+        end
+    until not retry
+
+    print ""
+
+    print "Ok, give me a moment while I make your config file..."
+
+    local config_dist = io.open("config/config.lua.dist", "r")
+    if not config_dist then
+        print "Uh oh! I couldn't read config/config.lua.dist. I suggest trying to download it from https://github.com/redxdev/xtlbot/blob/master/config/config.lua.dist and running this script again."
+        return
+    end
+
+    local config = config_dist:read("*all")
+    config_dist:close()
+
+    config = config:gsub("%%USERNAME%%", username):gsub("%%TOKEN%%", token):gsub("%%CHANNEL%%", channel)
+
+    local config_file = io.open("config/config.lua", "w+")
+    if not config_file then
+        print "Uh oh! I couldn't write config/config.lua. Make sure I have permission and nothing else is using the file!"
+        return
+    end
+
+    config_file:write(config)
+    config_file:flush()
+    config_file:close()
+
+    print "Done setting up your configuration file!"
 end
-
-config_file:write(config)
-config_file:flush()
-config_file:close()
-
-print "Done setting up your configuration file!"
-
-print ""
-
-print "Now it is time to setup an administrator. This user will be able to access all of xtlbot's functions."
-print "Enter the username for the administrator (you can add more via \"!role <user> admin\" later)"
-io.write(">> ")
-io.flush()
-local admin_name = io.read()
 
 print ""
 
@@ -157,8 +152,6 @@ if not db then
     return
 end
 
-print "Creating user..."
-
 -- fake core module that provides access to the database to the users module
 local fakecore = {
     db = function() return db end
@@ -167,14 +160,122 @@ local fakecore = {
 local users = require("src.users")
 users.init(fakecore)
 
-local user = users.get(admin_name)
+local has_admin = false
+for v in db:urows("select count(*) from users where role = \"admin\"") do
+    if v > 0 then
+        has_admin = true
+    end
+end
 
-print("Setting " .. user.name .. "'s role to admin")
-user.role = "admin"
-users.persist(user)
+local skip_admin = false
+if has_admin then
+    print "It looks like there is already an admin user set up. Do you want to skip creating a new admin user?"
+    local answer
+    repeat
+        io.write ">> "
+        io.flush()
+        answer = io.read()
+        answer = answer:lower()
+    until answer == "y" or answer == "n" or answer == "yes" or answer == "no"
+    if answer == "y" or answer == "yes" then
+        skip_admin = true
+    end
+end
 
-print("Cleaning up...")
-db:close()
+print ""
+
+if not skip_admin then
+    print "Now it is time to setup an administrator. This user will be able to access all of xtlbot's functions."
+    print "Enter the username for the administrator (you can add more via \"!role <user> admin\" later)"
+    io.write(">> ")
+    io.flush()
+    local admin_name = io.read()
+
+    print ""
+
+    print "Creating user..."
+
+    local user = users.get(admin_name)
+
+    print("Setting " .. user.name .. "'s role to admin")
+    user.role = "admin"
+    users.persist(user)
+
+    print("Cleaning up...")
+    db:close()
+
+    print ""
+end
+
+local plugin_list = {}
+local lfs = require("lfs")
+for file in lfs.dir("./plugins") do
+    local name = file:match("(.*)%.lua")
+    if name then
+        table.insert(plugin_list, name)
+    end
+end
+
+if #plugin_list == 0 then
+    print "You don't seem to have any plugins installed that we can configure!"
+    return
+end
+
+local plugins_done = false
+local plugins
+repeat
+    print "Alright, now you get to choose which plugins to enable. Here's the list of plugins you currently have installed:"
+    for k,v in ipairs(plugin_list) do
+        print("  " .. k .. ": " .. v)
+    end
+
+    print "Select which plugins you want enabled by typing out a list of their numbers, separated by spaces."
+
+    if #plugin_list >= 2 then
+        print("For example, if I wanted " .. plugin_list[1] .. " and " .. plugin_list[2] .. " I would write \"1 2\"")
+    end
+
+    io.write(">> ")
+    io.flush()
+    local plugin_str = io.read()
+
+    plugins = string.explode(" ", plugin_str)
+    local plugins_ok = true
+    for i,v in ipairs(plugins) do
+        local sel = tonumber(v)
+        if not sel or sel < 1 or sel > #plugins then
+            plugins_ok = false
+            break
+        end
+        plugins[i] = '\t"' .. plugin_list[sel] .. '"'
+    end
+
+    if plugins_ok then
+        plugins_done = true
+    else
+        print "That was an invalid set of plugins!"
+    end
+until plugins_done
+
+print "Alright, I'm going to write your new \"config/plugins.lua\". Give me a moment..."
+local file_str = [[
+-- List all plugins you want to enable here.
+
+local plugins = {
+]] .. table.concat(plugins, ",\n") .. [[
+
+}
+
+return plugins]]
+local output = io.open("config/plugins.lua", "w+")
+if not output then
+    print "There was a problem opening \"config/plugins.lua\" for writing!"
+    return
+end
+
+output:write(file_str)
+output:flush()
+output:close()
 
 print ""
 

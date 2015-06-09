@@ -10,6 +10,7 @@ To make it easy to install dependencies, get [LuaRocks](https://luarocks.org/). 
     luarocks install irc-engine
     luarocks install lsqlite3
     luarocks install luasocket
+    luarocks install luafilesystem
 
 You may have to build some dependencies yourself (especially on windows). Put xtlbot's files wherever you like, and you
 can move onto configuration!
