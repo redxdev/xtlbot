@@ -1,8 +1,8 @@
---
--- Created by IntelliJ IDEA.
--- User: Sam
--- Date: 6/8/2015
--- Time: 10:17 PM
--- To change this template use File | Settings | File Templates.
---
+local lang = {
+    point = "point", -- what to call the points (singular). Examples are: point, coin, credit, ...
+    points = "points", -- what to call the points (plural). Examples are: points, coins, credits, ...
+    add = "Gave %i %s to %s",
+    check = "You have %i %s"
+}
 
+return lang

@@ -22,7 +22,8 @@ are inherited through the role hierarchy.
 local roles = {
     limited = {
         permissions = {
-            "role.limietd"
+            "role.limited",
+            "points.check"
         },
         throttle = 10, -- 1 message per 10 seconds
         command_throttle = 20
@@ -34,7 +35,8 @@ local roles = {
             "util.whoami",
             "custom_commands.use",
             "raffle.enter",
-            "poll.vote"
+            "poll.vote",
+            "points.check"
         },
         throttle = 1, -- 1 message per second
         command_throttle = 3
@@ -78,7 +80,8 @@ local roles = {
             "timed_messages.list",
             "filter.block",
             "filter.unblock",
-            "twitch.mod"
+            "twitch.mod",
+            "points.give"
         },
         autosetmod = true, -- automatically set them as a moderator of the channel
         throttle = -1, -- no throttle

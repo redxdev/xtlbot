@@ -1,8 +1,5 @@
---
--- Created by IntelliJ IDEA.
--- User: Sam
--- Date: 6/8/2015
--- Time: 10:23 PM
--- To change this template use File | Settings | File Templates.
---
+local config = {
+    initial_points = 0 -- the amount of points all users start with
+}
 
+return config
