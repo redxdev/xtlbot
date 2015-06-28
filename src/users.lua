@@ -126,6 +126,10 @@ function users.has_permission(user, permission)
 end
 
 function users.role_has_permission(role, permission)
+    if permission == nil then
+        return true
+    end
+    
     if type(role) == "string" then
         role = roles[role]
     end
