@@ -12,7 +12,7 @@ local config = {
                             -- disable this option if you use other bots with commands not registered to
                             -- xtlbot.
 
-    -- DEBUG/SETUP STUFF
+    -- DEBUG STUFF
     sudo = nil, -- makes this user have the admin role (this is NOT stored in the database)
                 -- this does not grant all permissions, it only grants the admin role
                 -- DO NOT USE SUDO UNLESS YOU KNOW WHAT YOU ARE DOING
