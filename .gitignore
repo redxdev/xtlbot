@@ -2,3 +2,4 @@
 .idea/
 database.sqlite3
 config/config.lua
+config/plugins.lua

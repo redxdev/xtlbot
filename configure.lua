@@ -200,12 +200,12 @@ if not skip_admin then
     print("Setting " .. user.name .. "'s role to admin")
     user.role = "admin"
     users.persist(user)
-
-    print("Cleaning up...")
-    db:close()
-
-    print ""
 end
+
+print("Cleaning up...")
+db:close()
+
+print ""
 
 local plugin_list = {}
 local lfs = require("lfs")
@@ -221,61 +221,84 @@ if #plugin_list == 0 then
     return
 end
 
-local plugins_done = false
-local plugins
-repeat
-    print "Alright, now you get to choose which plugins to enable. Here's the list of plugins you currently have installed:"
-    for k,v in ipairs(plugin_list) do
-        print("  " .. k .. ": " .. v)
-    end
-
-    print "Select which plugins you want enabled by typing out a list of their numbers, separated by spaces."
-
-    if #plugin_list >= 2 then
-        print("For example, if I wanted " .. plugin_list[1] .. " and " .. plugin_list[2] .. " I would write \"1 2\"")
-    end
-
-    io.write(">> ")
-    io.flush()
-    local plugin_str = io.read()
-
-    plugins = string.explode(" ", plugin_str)
-    local plugins_ok = true
-    for i,v in ipairs(plugins) do
-        local sel = tonumber(v)
-        if not sel or sel < 1 or sel > #plugins then
-            plugins_ok = false
-            break
-        end
-        plugins[i] = '\t"' .. plugin_list[sel] .. '"'
-    end
-
-    if plugins_ok then
-        plugins_done = true
-    else
-        print "That was an invalid set of plugins!"
-    end
-until plugins_done
-
-print "Alright, I'm going to write your new \"config/plugins.lua\". Give me a moment..."
-local file_str = [[
--- List all plugins you want to enable here.
-
-local plugins = {
-]] .. table.concat(plugins, ",\n") .. [[
-
-}
-
-return plugins]]
-local output = io.open("config/plugins.lua", "w+")
-if not output then
-    print "There was a problem opening \"config/plugins.lua\" for writing!"
-    return
+local plugins_exists = false
+if file_exists("config/plugins.lua") then
+    plugins_exists = true
 end
 
-output:write(file_str)
-output:flush()
-output:close()
+local skip_plugins = false
+if plugins_exists then
+    print "It looks like you already have plugins enabled. Do you want to skip the plugins step?"
+    local answer
+    repeat
+        io.write ">> "
+        io.flush()
+        answer = io.read()
+        answer = answer:lower()
+    until answer == "y" or answer == "n" or answer == "yes" or answer == "no"
+    if answer == "y" or answer == "yes" then
+        skip_plugins = true
+    end
+    print ""
+end
+
+if not skip_plugins then
+    local plugins_done = false
+    local plugins
+    repeat
+        print "Alright, now you get to choose which plugins to enable. Here's the list of plugins you currently have installed:"
+        for k,v in ipairs(plugin_list) do
+            print("  " .. k .. ": " .. v)
+        end
+
+        print "Select which plugins you want enabled by typing out a list of their numbers, separated by spaces."
+
+        if #plugin_list >= 2 then
+            print("For example, if you wanted " .. plugin_list[1] .. " and " .. plugin_list[2] .. " you would write \"1 2\"")
+        end
+
+        io.write(">> ")
+        io.flush()
+        local plugin_str = io.read()
+
+        plugins = string.explode(" ", plugin_str)
+        local plugins_ok = true
+        for i,v in ipairs(plugins) do
+            local sel = tonumber(v)
+            if not sel or sel < 1 or sel > #plugin_list then
+                plugins_ok = false
+                break
+            end
+            plugins[i] = '\t"' .. plugin_list[sel] .. '"'
+        end
+
+        if plugins_ok then
+            plugins_done = true
+        else
+            print "That was an invalid set of plugins!"
+        end
+    until plugins_done
+
+    print "Alright, I'm going to write your new \"config/plugins.lua\". Give me a moment..."
+    local file_str = [[
+    -- List all plugins you want to enable here.
+
+    local plugins = {
+    ]] .. table.concat(plugins, ",\n") .. [[
+
+    }
+
+    return plugins]]
+    local output = io.open("config/plugins.lua", "w+")
+    if not output then
+        print "There was a problem opening \"config/plugins.lua\" for writing!"
+        return
+    end
+
+    output:write(file_str)
+    output:flush()
+    output:close()
+end
 
 print ""
 
