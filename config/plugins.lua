@@ -8,7 +8,7 @@ local plugins = {
 	"poll",
 	"raffle",
 	"throttle",
-	"timed_messages",
+    "timed_messages",
     "points"
 }
 
