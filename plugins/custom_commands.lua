@@ -55,7 +55,7 @@ local function cmd_addcom(user, args)
 
         core.send_to_user(user.name, lang.custom_commands.created:format(name))
     else
-        core.sent_to_user(user.name, "!addcom <name> <response>")
+        core.send_to_user(user.name, "!addcom <name> <response>")
     end
 end
 
