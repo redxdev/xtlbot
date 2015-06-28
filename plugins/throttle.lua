@@ -86,12 +86,12 @@ function plugin.init()
 end
 
 function plugin.check_message(user, msg)
-    if users.get_throttle(user.role) < 0 then return true end
-
     local currentTime = socket.gettime()
 
     if #msg > 0 then
         if msg:sub(1,1) == "!" then
+            if users.get_command_throttle(user.role) < 0 then return true end
+
             local recent = recent_commands[user.name]
             if not recent then
                 recent = {}
@@ -102,11 +102,14 @@ function plugin.check_message(user, msg)
 
             if #recent >= 2 then
                 local tv = users.get_command_throttle(user.role)
-                core.send_to_user(user.name, lang.throttle.command)
+                core.send_to_user(user.name, lang.throttle.command:format(tv))
                 core.timeout(user.name, tv)
                 print("Command throttled " .. user.name)
+                return false
             end
         else
+            if users.get_throttle(user.role) < 0 then return true end
+
             local recent = recent_messages[user.name]
             if not recent then
                 recent = {}
@@ -120,9 +123,12 @@ function plugin.check_message(user, msg)
                 core.send_to_user(user.name, lang.throttle.too_fast:format(tv))
                 core.timeout(user.name, tv)
                 print("Throttled " .. user.name)
+                return false
             end
         end
     end
+
+    return true
 end
 
 return plugin
