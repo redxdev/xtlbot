@@ -1,5 +1,7 @@
 # eXtendable Twitch Lua Bot
 
+[![Join the chat at https://gitter.im/redxdev/xtlbot](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/redxdev/xtlbot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 xtlbot is a configurable twitch bot made with moderation capabilities in mind. It is written in Lua (5.1).
 Currently, a single instance of xtlbot can only work with a single channel at a time.
 
