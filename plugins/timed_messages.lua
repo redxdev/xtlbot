@@ -42,6 +42,17 @@ local function cmd_addmessage(user, args)
 
     local time = tonumber(args[2])
     local message = concat(args, " ", 3)
+
+    if time == nil or time < 1 then
+        core.send_to_user(user.name, lang.timed_messages.invalid_time)
+        return
+    end
+
+    if message == nil or #message == 0 then
+        core.send_to_user(user.name, lang.timed_messages.invalid_message)
+        return
+    end
+
     local stm = core.db():prepare("insert into timed_messages (name, message, time) values (?, ?, ?)")
     stm:bind(1, name)
     stm:bind(2, message)

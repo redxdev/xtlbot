@@ -26,7 +26,10 @@ local function cmd_whoami(user, args)
 end
 
 local function cmd_role(user, args)
-    if #args ~= 2 then core.send_to_user(user.name, "!role <user> <role>") end
+    if #args ~= 2 then
+        core.send_to_user(user.name, "!role <user> <role>")
+        return
+    end
 
     local target = users.get(args[1])
     target.role = args[2]
