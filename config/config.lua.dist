@@ -14,6 +14,7 @@ local config = {
 
     -- DEBUG/SETUP STUFF
     sudo = nil, -- makes this user have the admin role (this is NOT stored in the database)
+                -- this does not grant all permissions, it only grants the admin role
                 -- DO NOT USE SUDO UNLESS YOU KNOW WHAT YOU ARE DOING
 
     debug_protocol = false, -- shows all messages sent/received through irc
