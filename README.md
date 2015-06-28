@@ -62,7 +62,7 @@ language file.
 
 ## Are we there yet?
 
-xtlbot is not nearly production ready. It is in the early stages of development and should not be used.
+xtlbot works but has not been tested on a large channel. Use at your own risk.
 
 ## Plugins
 
