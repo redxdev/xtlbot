@@ -26,23 +26,12 @@ local function process_message(sender, origin, msg, pm)
     if #msg > 0 and msg:sub(1, 1) == "!" then
         local arguments = explode(" ", msg)
         local name = arguments[1]:sub(2)
-        if command_list[name] then
-            local command = command_list[name]
-            local user = users.get(sender[1])
-            if not users.has_permission(user, command.permission) then
-                core.send_to_user(user.name, lang.global.missing_permission)
-                return
-            end
+        local user = users.get(sender[1])
+        remove(arguments, 1)
 
-            print("Command \"" .. name .. "\" called by " .. sender[1])
-            remove(arguments, 1)
-            local status, err = pcall(command.callback, user, arguments)
-            if not status then
-                print(err)
-                core.send_to_user(sender[1], "There was a problem running that command.")
-            end
-        elseif config.unknown_command then
-            core.send_to_user(sender[1], lang.global.unknown_command:format(name))
+        local status, msg = commands.call(user, name, arguments)
+        if not status and msg ~= nil then
+            core.send_to_user(user.name, msg)
         end
     end
 end
@@ -81,6 +70,32 @@ end
 
 function commands.list()
     return command_list
+end
+
+function commands.call(user, name, arguments)
+    assert(type(user) == "table", "user must be a table")
+    assert(type(name) == "string", "name must be a string")
+    assert(type(arguments) == "table", "arguments must be a table")
+
+    if command_list[name] then
+        local command = command_list[name]
+        if not users.has_permission(user, command.permission) then
+            return false, lang.global.missing_permission
+        end
+
+        print("Command \"" .. name .. "\" called by " .. user.name)
+        local status, err = pcall(command.callback, user, arguments)
+        if not status then
+            print(err)
+            return false, lang.global.command_error
+        end
+
+        return true
+    elseif config.unknown_command then
+        return false, lang.global.unknown_command:format(name)
+    else
+        return false
+    end
 end
 
 return commands
