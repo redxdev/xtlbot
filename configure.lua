@@ -90,10 +90,20 @@ if not skip_config then
 
         print ""
 
-        print "What channel should the bot watch? This should be the username of the channel (i.e. xtlbot for the xtlbot channel)"
-        io.write ">> "
-        io.flush()
-        channel = io.read()
+        local channel_ok = false
+        repeat
+            print "What channel should the bot watch? This should be the username of the channel (i.e. xtlbot for the xtlbot channel)"
+            io.write ">> "
+            io.flush()
+            channel = io.read()
+
+            if channel:sub(1,1) == "#" then
+                print "Please omit the # at the beginning of the channel name."
+                channel_ok = false
+            else
+                channel_ok = true
+            end
+        until channel_ok == true
 
         print ""
 
