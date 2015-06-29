@@ -22,7 +22,8 @@ local function loop_hook()
     local currentTime = socket.gettime()
 
     if current_raffle then
-        if current_raffle.next_announce < currentTime and config.announce_time > 0 then
+        if current_raffle.next_announce < currentTime and config.announce_time > 0
+                and current_raffle.end_time + 5 < currentTime then
             core.send(lang.raffle.announce)
             current_raffle.next_announce = currentTime + config.announce_time
         end

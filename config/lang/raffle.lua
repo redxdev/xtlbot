@@ -10,7 +10,7 @@ local lang = {
     entered = "You have entered the raffle!",
     already_entered = "You already entered the raffle",
     no_entries = "No one entered the raffle :(",
-    winner = "The winner of the raffle is @%s",
+    winner = "The winner of the raffle is %s!",
     canceled = "The raffle was canceled"
 }
 
