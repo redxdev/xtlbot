@@ -19,6 +19,8 @@ local current_poll
 
 local plugin = {}
 
+local points = nil
+
 local function poll_options_str()
     assert(current_poll)
 
@@ -137,6 +139,15 @@ local function cmd_endpoll(user, args)
     local results = current_poll.results
     current_poll = nil
 
+    -- distribute bonus
+    if points ~= nil then
+       for name,_ in pairs(results) do
+           local u = points.get(name)
+           u.points = u.points + config.point_bonus
+           points.persist(u)
+       end
+    end
+
     local counts = {}
     for k in ipairs(options) do
         counts[k] = 0
@@ -169,6 +180,13 @@ function plugin.init()
     commands.register("poll", "start a poll", cmd_poll, "poll.start")
     commands.register("vote", "vote in a poll", cmd_vote, "poll.vote")
     commands.register("endpoll", "end a poll", cmd_endpoll, "poll.end")
+
+    if config.point_bonus > 0 then
+        points = core.getplugin('points')
+        if points == nil then
+            error("point_bonus is set but points plugin is not loaded. Is it enabled in config/plugins.lua?")
+        end
+    end
 end
 
 return plugin

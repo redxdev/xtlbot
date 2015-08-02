@@ -134,8 +134,12 @@ function core.init()
     for _,name in ipairs(plugins) do
         print("Loading plugin " .. name)
         local plugin = require("plugins." .. name)
-        plugin.init()
         loaded_plugins[name] = plugin
+    end
+
+    for name,plugin in pairs(loaded_plugins) do
+        print("Initializing plugin " .. name)
+        plugin.init()
     end
 
     while running do
