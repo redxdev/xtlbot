@@ -271,6 +271,13 @@ if not skip_plugins then
         io.flush()
         local plugin_str = io.read()
 
+        if string.trim(plugin_str) == '' then
+            print("Not configuring any plugins.")
+            plugins = {}
+            plugins_done = true
+            break
+        end
+
         plugins = string.explode(" ", plugin_str)
         local plugins_ok = true
         for i,v in ipairs(plugins) do

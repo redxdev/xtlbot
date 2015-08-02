@@ -14,6 +14,10 @@ function string.explode(div, str)
     return arr
 end
 
+function string.trim(s)
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
 -- thank you http://stackoverflow.com/a/23592008/646180
 local domains = [[.ac.ad.ae.aero.af.ag.ai.al.am.an.ao.aq.ar.arpa.as.asia.at.au
    .aw.ax.az.ba.bb.bd.be.bf.bg.bh.bi.biz.bj.bm.bn.bo.br.bs.bt.bv.bw.by.bz.ca
