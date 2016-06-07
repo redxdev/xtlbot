@@ -95,6 +95,7 @@ end
 local function cmd_vote(user, args)
     if not current_poll then
         core.send_to_user(user.name, lang.poll.not_running)
+        return
     end
 
     if #args ~= 1 then
